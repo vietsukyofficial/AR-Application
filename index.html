@@ -9,6 +9,9 @@
   <link rel="preload" href="targets.mind" as="fetch" crossorigin>
   <link rel="preload" href="Vid1.mp4" as="video" type="video/mp4">
   <link rel="preload" href="Vid2.mp4" as="video" type="video/mp4">
+  <link rel="preload" href="Vid3.mp4" as="video" type="video/mp4">
+  <link rel="preload" href="Vid4.mp4" as="video" type="video/mp4">
+  <link rel="preload" href="Vid5.mp4" as="video" type="video/mp4">
   
   <!-- Load scripts with defer for better performance -->
   <script defer src="https://cdn.jsdelivr.net/npm/mind-ar@1.1.0/dist/mindar-image.prod.js"></script>
@@ -439,6 +442,9 @@
     function resetVideos() {
       sessionStorage.removeItem('vid1');
       sessionStorage.removeItem('vid2');
+      sessionStorage.removeItem('vid3');
+      sessionStorage.removeItem('vid4');
+      sessionStorage.removeItem('vid5');
       updateStatus('Đã reset videos');
       setTimeout(() => location.reload(), 1000);
     }
@@ -484,6 +490,9 @@
 
         const anchor1 = mindarThree.addAnchor(0);
         const anchor2 = mindarThree.addAnchor(1);
+        const anchor3 = mindarThree.addAnchor(2);
+        const anchor4 = mindarThree.addAnchor(3);
+        const anchor5 = mindarThree.addAnchor(4);
 
         updateLoadingProgress(50);
 
@@ -493,11 +502,17 @@
         let userInteracted = false;
         let anchor1Visible = false;
         let anchor2Visible = false;
+        let anchor3Visible = false;
+        let anchor4Visible = false;
+        let anchor5Visible = false;
         
         // Optimized video position storage
         const videoPositions = {
           vid1: parseFloat(sessionStorage.getItem("vid1")) || 0,
-          vid2: parseFloat(sessionStorage.getItem("vid2")) || 0
+          vid2: parseFloat(sessionStorage.getItem("vid2")) || 0,
+          vid3: parseFloat(sessionStorage.getItem("vid3")) || 0,
+          vid4: parseFloat(sessionStorage.getItem("vid4")) || 0,
+          vid5: parseFloat(sessionStorage.getItem("vid5")) || 0
         };
 
         // Optimized video creation with lazy loading
@@ -539,16 +554,28 @@
 
         const scale1 = 0.58;
         const scale2 = 0.78;
+        const scale3 = 0.68;
+        const scale4 = 0.68;
+        const scale5 = 0.68;
         
         // Optimize geometry creation
         const geometry1 = new THREE.PlaneGeometry(1.778 * scale1, 1 * scale1, 1, 1);
         const geometry2 = new THREE.PlaneGeometry(1.33 * scale2, 1 * scale2, 1, 1);
+        const geometry3 = new THREE.PlaneGeometry(1.778 * scale3, 1 * scale3, 1, 1);
+        const geometry4 = new THREE.PlaneGeometry(1.778 * scale4, 1 * scale4, 1, 1);
+        const geometry5 = new THREE.PlaneGeometry(1.778 * scale5, 1 * scale5, 1, 1);
         
         const vid1 = createVideo("Vid1.mp4", geometry1);
         const vid2 = createVideo("Vid2.mp4", geometry2);
+        const vid3 = createVideo("Vid3.mp4", geometry3);
+        const vid4 = createVideo("Vid4.mp4", geometry4);
+        const vid5 = createVideo("Vid5.mp4", geometry5);
 
         anchor1.group.add(vid1.mesh);
         anchor2.group.add(vid2.mesh);
+        anchor3.group.add(vid3.mesh);
+        anchor4.group.add(vid4.mesh);
+        anchor5.group.add(vid5.mesh);
 
         updateLoadingProgress(70);
 
@@ -563,10 +590,16 @@
           if (isSoundEnabled) {
             vid1.video.muted = false;
             vid2.video.muted = false;
+            vid3.video.muted = false;
+            vid4.video.muted = false;
+            vid5.video.muted = false;
           }
           
           if (anchor1Visible) vid1.video.play().catch(console.warn);
           if (anchor2Visible) vid2.video.play().catch(console.warn);
+          if (anchor3Visible) vid3.video.play().catch(console.warn);
+          if (anchor4Visible) vid4.video.play().catch(console.warn);
+          if (anchor5Visible) vid5.video.play().catch(console.warn);
           
           document.body.removeEventListener("click", handleUserInteraction);
           document.body.removeEventListener("touchstart", handleUserInteraction);
@@ -626,6 +659,84 @@
           vid2.video.pause();
         };
 
+        // Anchor 3 events
+        anchor3.onTargetFound = () => {
+          anchor3Visible = true;
+          vid3.video.currentTime = videoPositions.vid3 || 0;
+          updateStatus("Đã phát hiện mục tiêu 3", true);
+          
+          if (!userInteracted) {
+            overlayHint.style.display = "none";
+            overlayClick.style.display = "block";
+          } else {
+            vid3.video.play().catch(console.warn);
+            overlayHint.style.display = "none";
+          }
+        };
+
+        anchor3.onTargetLost = () => {
+          anchor3Visible = false;
+          overlayClick.style.display = "none";
+          overlayHint.style.display = "block";
+          updateStatus("Đang tìm kiếm mục tiêu...");
+          
+          videoPositions.vid3 = vid3.video.currentTime;
+          sessionStorage.setItem("vid3", videoPositions.vid3.toString());
+          vid3.video.pause();
+        };
+
+        // Anchor 4 events
+        anchor4.onTargetFound = () => {
+          anchor4Visible = true;
+          vid4.video.currentTime = videoPositions.vid4 || 0;
+          updateStatus("Đã phát hiện mục tiêu 4", true);
+          
+          if (!userInteracted) {
+            overlayHint.style.display = "none";
+            overlayClick.style.display = "block";
+          } else {
+            vid4.video.play().catch(console.warn);
+            overlayHint.style.display = "none";
+          }
+        };
+
+        anchor4.onTargetLost = () => {
+          anchor4Visible = false;
+          overlayClick.style.display = "none";
+          overlayHint.style.display = "block";
+          updateStatus("Đang tìm kiếm mục tiêu...");
+          
+          videoPositions.vid4 = vid4.video.currentTime;
+          sessionStorage.setItem("vid4", videoPositions.vid4.toString());
+          vid4.video.pause();
+        };
+
+        // Anchor 5 events
+        anchor5.onTargetFound = () => {
+          anchor5Visible = true;
+          vid5.video.currentTime = videoPositions.vid5 || 0;
+          updateStatus("Đã phát hiện mục tiêu 5", true);
+          
+          if (!userInteracted) {
+            overlayHint.style.display = "none";
+            overlayClick.style.display = "block";
+          } else {
+            vid5.video.play().catch(console.warn);
+            overlayHint.style.display = "none";
+          }
+        };
+
+        anchor5.onTargetLost = () => {
+          anchor5Visible = false;
+          overlayClick.style.display = "none";
+          overlayHint.style.display = "block";
+          updateStatus("Đang tìm kiếm mục tiêu...");
+          
+          videoPositions.vid5 = vid5.video.currentTime;
+          sessionStorage.setItem("vid5", videoPositions.vid5.toString());
+          vid5.video.pause();
+        };
+
         // Optimized resize handler with debouncing
         const adjustRendererSize = debounce(() => {
           const container = document.querySelector("#ar-container");
@@ -678,7 +789,7 @@
 
         // Show hint if no targets found
         setTimeout(() => {
-          if (!anchor1Visible && !anchor2Visible && !userInteracted) {
+          if (!anchor1Visible && !anchor2Visible && !anchor3Visible && !anchor4Visible && !anchor5Visible && !userInteracted) {
             overlayHint.style.display = "block";
           }
         }, 1500);
@@ -696,6 +807,9 @@
           isSoundEnabled = !isSoundEnabled;
           vid1.video.muted = !isSoundEnabled;
           vid2.video.muted = !isSoundEnabled;
+          vid3.video.muted = !isSoundEnabled;
+          vid4.video.muted = !isSoundEnabled;
+          vid5.video.muted = !isSoundEnabled;
           updateStatus(`Âm thanh: ${isSoundEnabled ? 'Bật' : 'Tắt'}`);
         };
 
