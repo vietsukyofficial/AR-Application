@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <link href="https://fonts.googleapis.com/css?family=Be+Vietnam+Pro:300,400,500,600,700,800,900&display=swap"
+              rel="stylesheet" />
+        <link href="assets/css/course-complete.css" rel="stylesheet" />
+        <title>Hoàn thành bài học - Việt Sử Ký</title>
+        <link rel="icon" type="image/png" href="assets/images/logo.png">
+        <link rel="shortcut icon" type="image/png" href="ass    ets/images/logo.png">
+    </head>
+
+    <body>
+        <!-- Fireworks Container -->
+        <div class="fireworks-container"></div>
+
+        <!-- Main Content -->
+        <div class="completion-page">
+            <!-- Character Image -->
+            <div class="character-container">
+                <img src="assets/images/v0_4866.png" alt="Graduation Character" class="character-image">
+            </div>
+
+            <!-- Main Title -->
+            <h1 class="main-title">Chúc mừng!</h1>
+            <p class="subtitle">Bạn đã tiếp cận đúng tinh thần cốt lõi của tư tưởng Hồ Chí Minh về Nhà nước.</p>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <!-- <button class="btn-continue" onclick="window.location.href = 'https://game.sanboxs.site'">Nhấn để tiếp
+                    tục</button> -->
+                <!-- <button class="btn-secondary" data-navigate="courses.html">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" strok e-linejoin="round">
+                        <path d="m12 19-7-7 7-7" />
+                        <path d="M19 12H5" />
+                    </svg>
+                    Quay lại khóa học
+                </button> -->
+                <button class="btn-primary" data-navigate="/">
+                    Về trang chủ
+                </button>
+            </div>
+        </div>
+
+        <script>
+            // Fireworks animation
+            document.addEventListener('DOMContentLoaded', function () {
+                setTimeout(startFireworks, 500);
+                setInterval(startFireworks, 2000);
+
+                // Initialize navigation handlers
+                initNavigationHandlers();
+            });
+
+            function initNavigationHandlers() {
+                // Handle data-navigate buttons
+                document.querySelectorAll('[data-navigate]').forEach(button => {
+                    button.addEventListener('click', function () {
+                        const targetUrl = this.getAttribute('data-navigate');
+                        window.location.href = targetUrl;
+                    });
+                });
+            }
+
+            function startFireworks() {
+                const container = document.querySelector('.fireworks-container');
+                const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff'];
+
+                // Create multiple fireworks
+                for (let i = 0; i < 3; i++) {
+                    setTimeout(() => {
+                        createFirework(container, colors);
+                    }, i * 300);
+                }
+            }
+
+            function createFirework(container, colors) {
+                const firework = document.createElement('div');
+                firework.className = 'firework';
+
+                // Random position
+                firework.style.left = Math.random() * 80 + 10 + '%';
+                firework.style.top = Math.random() * 40 + 20 + '%';
+
+                // Random color
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                firework.style.setProperty('--firework-color', color);
+
+                container.appendChild(firework);
+
+                // Remove after animation
+                setTimeout(() => {
+                    firework.remove();
+                }, 1500);
+            }
+
+            function continueToNext() {
+                alert('Chuyển đến bài học tiếp theo!');
+            }
+
+            function goToHome() {
+                window.location.href = '/';
+            }
+        </script>
+    </body>
+
+</html>

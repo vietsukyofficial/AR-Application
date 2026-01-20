@@ -151,7 +151,7 @@
                     </div>
                 </div>
 
-                <button class="start-lesson-btn" id="completionBtn" style="display: none;" onclick="window.location.href='course-complete.html'">Hoàn thành</button>
+                <button class="start-lesson-btn" id="startLessonBtn" data-navigate="/courses/course-5">Bắt đầu học</button>
             </div>
         </div>
     </section>
@@ -245,34 +245,10 @@
                 
                 // Hide submit button
                 quizElement.querySelector('.vsk-quiz-submit').style.display = 'none';
-                
-                // Track completion
-                markQuizCompleted(quizName);
             } else {
                 resultDiv.className = 'vsk-quiz-result incorrect';
                 resultIcon.textContent = '✗';
                 resultMessage.textContent = 'Chưa chính xác. Hãy thử lại!';
-            }
-        }
-
-        // Track quiz completion
-        const completedQuizzes = new Set();
-
-        function markQuizCompleted(quizName) {
-            completedQuizzes.add(quizName);
-            console.log('Completed quizzes:', completedQuizzes.size, '/', 3);
-            
-            // Check if all 3 quizzes are completed
-            if (completedQuizzes.size === 3) {
-                showCompletionButton();
-            }
-        }
-
-        function showCompletionButton() {
-            const completionBtn = document.getElementById('completionBtn');
-            if (completionBtn) {
-                completionBtn.style.display = 'block';
-                completionBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         }
     </script>
